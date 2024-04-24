@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using myFirstProject.Data;
 using myFirstProject.Controllers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +10,22 @@ namespace myFirstProject.Models
 {
     public class EmployeeMetadata
     {
+    public int Id { get; set; }
 
+    [Required]
+    public string? Firstname { get; set; }
+
+    [Required] //ใช้เพื่อบังคับให้กรอกค่าเข้ามา
+    public string? Lastname { get; set; }
+
+    [Range(15000,80000)]
+    public int? Salary { get; set; }
+
+    public bool? IsDelete { get; set; }
+
+    public DateTime? CreateDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
     }
 
     [MetadataType(typeof(EmployeeMetadata))]
@@ -28,7 +42,48 @@ namespace myFirstProject.Models
 
             return employee;
         }
+
+        public static List<Employee> GetAll(EmployeeContext db)
+        {
+            List<Employee> returnThis = db.Employees.Include(i=>i.Department).Where(q => q.IsDelete != true).ToList();
+            return returnThis;
+        }
+
+        public static Employee GetById(EmployeeContext db,int id)
+        {
+            Employee? returnThis = db.Employees.Include(i=>i.Department).Where(q => q.Id == id && q.IsDelete != true).FirstOrDefault();
+            return returnThis ?? new Employee();
+        }
+
+        public static Employee Update(EmployeeContext db, Employee employee)
+        {
+            employee.UpdateDate = DateTime.Now;
+
+            db.Entry(employee).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return employee;
+        }
+
+        public static Employee Delete(EmployeeContext db, int id)
+        {
+            Employee employee= GetById(db,id);
+            // db.Employees.Remove(employee); เป็นวิธีการลบแบบให้หายไปเลย
+            db.Entry(employee).State = EntityState.Modified; // Soft Delete
+            db.SaveChanges();
+
+            return employee;
+        }
+
+        public static List<Employee> Search(EmployeeContext db, string keyword)
+        {
+            List<Employee> returnThis = db.Employees.Where(q => q.Firstname.Contains(keyword) || q.Lastname.Contains(keyword) && q.IsDelete != true).ToList();
+            return returnThis;
+        }
+
     }
+
+    
         
     
 }

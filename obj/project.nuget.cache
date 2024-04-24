@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Ar5XAoTy7wngm+qnXKcy8BupdBAYp7Bqvh0mL/ERpkZNrN9b0JuwQsKKd854gkCkP6/9B8IVEFSO/FULYehCRw==",
+  "dgSpecHash": "6WDvYpmWEJ5k5DiQTnMMiL21E82BhbePmdmgy4uyBzfKqnKY8x+MnP32fXMHWPFEzAGQBKSbfmsJeKCuzN5lKg==",
   "success": true,
-  "projectFilePath": "c:\\Users\\aek\\Desktop\\.NetProject\\AspDotNet\\myFirstProject\\myFirstProject.csproj",
+  "projectFilePath": "C:\\Users\\aek\\Desktop\\.NetProject\\AspDotNet\\myFirstProject\\myFirstProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aek\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\aek\\.nuget\\packages\\docx\\3.0.0\\docx.3.0.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
@@ -67,6 +68,7 @@
     "C:\\Users\\aek\\.nuget\\packages\\system.formats.asn1\\5.0.0\\system.formats.asn1.5.0.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.35.0\\system.identitymodel.tokens.jwt.6.35.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\system.io.filesystem.accesscontrol\\5.0.0\\system.io.filesystem.accesscontrol.5.0.0.nupkg.sha512",
+    "C:\\Users\\aek\\.nuget\\packages\\system.io.packaging\\4.5.0\\system.io.packaging.4.5.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\system.memory.data\\1.0.2\\system.memory.data.1.0.2.nupkg.sha512",

@@ -3,15 +3,11 @@ using System.Collections.Generic;
 
 namespace myFirstProject.Models;
 
-public partial class Employee
+public partial class Department
 {
     public int Id { get; set; }
 
-    public string? Firstname { get; set; }
-
-    public string? Lastname { get; set; }
-
-    public int? Salary { get; set; }
+    public string? Name { get; set; }
 
     public bool? IsDelete { get; set; }
 
@@ -19,7 +15,5 @@ public partial class Employee
 
     public DateTime? UpdateDate { get; set; }
 
-    public int? DepartmentId { get; set; }
-
-    public virtual Department? Department { get; set; }
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }
