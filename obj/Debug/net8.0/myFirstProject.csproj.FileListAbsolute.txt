@@ -142,3 +142,8 @@ c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\EPPlu
 c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
 c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
 c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\PdfSharpCore.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\ICSharpCode.SharpZipLib.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\SixLabors.Fonts.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\de\PdfSharpCore.resources.dll

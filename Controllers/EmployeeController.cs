@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 using myFirstProject.Models;
 using OfficeOpenXml;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
@@ -288,6 +291,85 @@ public class EmployeeController : ControllerBase
             // Return the Excel file as a file result
             return File(excelBytes, contentType, fileName);
         }
+    }
+
+    [HttpGet("ExportToPdf",Name = "ExportToPdf")]
+
+    public ActionResult ExportToPdf()
+    {
+        List<Employee> employees = _db.Employees.Where(q => q.IsDelete == false).Include(q => q.Department).ToList();
+        
+        //Create a new PDF document
+        PdfDocument document = new PdfDocument();
+
+        // Create a new page
+        PdfPage page = document.AddPage();
+
+        //Create a graphic object for drawing on the page
+        XGraphics gfx = XGraphics.FromPdfPage(page);
+
+        // Create a font
+        XFont font = new XFont("Arial",12,XFontStyle.Bold);
+
+        //Set the Column width
+        double[] columnWidths = {100,150,150,100};
+    
+        //Set the starting position for drawing the table
+        double x = 40 , y = 40;
+
+        //Calculate the header height with a buffer for potential line wrapping
+        double headerHeight = gfx.MeasureString("Name",font).Height * 2 ;
+
+        //Define the Light blue color for the header row
+        XColor lightBlue = XColor.FromArgb(173,216,230);
+
+        //Draw table header background with light blue color
+        gfx.DrawRectangle(XBrushes.LightBlue, x, y, columnWidths.Sum(), headerHeight);
+
+        //Draw table header border (optional)
+        gfx.DrawRectangle(XPens.Black, x, y, columnWidths.Sum(), headerHeight);
+
+        //Draw the table headers inside the border with vertical centering
+        gfx.DrawString("Name", font, XBrushes.Black,new XRect(x, y, columnWidths[0],headerHeight), XStringFormats.Center);
+        gfx.DrawString("Department", font, XBrushes.Black,new XRect(x + columnWidths[0], y, columnWidths[1], headerHeight), XStringFormats.Center);
+        gfx.DrawString("Salary", font, XBrushes.Black,new XRect(x +  columnWidths[0] + columnWidths[1] + columnWidths[2] , y , columnWidths[3] , headerHeight), XStringFormats.Center);
+        
+        // Move to the next row 
+        y += headerHeight ;
+        
+        
+        // Draw the table rows
+        for (int i = 0 ; i < employees.Count ; i++)
+        {
+            //Alternate row color
+           
+            if ( i%2==0)
+                gfx.DrawRectangle(XBrushes.LightGray,x,y,columnWidths.Sum(),headerHeight);
+
+            //Draw row border
+            gfx.DrawRectangle(XPens.Black, x, y, columnWidths.Sum(),headerHeight);
+
+            // Draw the employee information with vertical centering
+            gfx.DrawString(employees[i].Firstname + employees[i].Lastname , font, XBrushes.Black, new XRect( x, y, columnWidths[0], headerHeight), XStringFormats.Center);
+            // ถ้าข้อมูลในตารางไม่มี ERROR!!!
+            // Check department if it null send the text null in to PDF File
+           if(employees[i].Department != null){
+            gfx.DrawString(employees[i].Department.Name, font, XBrushes.Black, new XRect(x + columnWidths[0], y, columnWidths[1], headerHeight), XStringFormats.Center);
+            }else{
+            gfx.DrawString("null", font, XBrushes.Black, new XRect(x + columnWidths[0], y, columnWidths[1], headerHeight), XStringFormats.Center);          
+            }
+            gfx.DrawString(employees[i].Salary.ToString(), font, XBrushes.Black, new XRect(x +  columnWidths[0] + columnWidths[1] + columnWidths[2] , y , columnWidths[3] , headerHeight), XStringFormats.Center);
+
+            // Move to the next row
+            y += headerHeight;
+        }
+
+        //Save the document to a memory stream
+        MemoryStream stream = new MemoryStream();
+        document.Save(stream);
+        stream.Position = 0;
+
+        return File(stream, "application/pdf", "EmployeeTable.pdf");
     }
 }
     
