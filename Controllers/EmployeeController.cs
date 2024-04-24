@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 using myFirstProject.Models;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 
 [ApiController]
@@ -175,6 +177,58 @@ public class EmployeeController : ControllerBase
             Message = "Success",
             Data = employees
         });
+    }
+
+    [HttpGet("export/word",Name = "ExportEmployeeToWord")]
+
+    public IActionResult ExportEmployeeToWord()
+    {
+        List<Employee> employees = Employee.GetAll(_db).ToList();
+
+        using (DocX document = DocX.Create("SampleDocument.docx"))
+        {   
+            // Add a title to the document
+            document.InsertParagraph("List of employees").FontSize(18).Bold().Alignment = Alignment.center;
+
+            // Add a Table with some data
+            Table table = document.AddTable(1,4);
+            table.Design = TableDesign.ColorfulList;
+            table.Alignment = Alignment.center;
+            table.AutoFit = AutoFit.Contents;
+
+            // Add headers to the table
+            table.Rows[0].Cells[0].Paragraphs[0].Append("ID").Bold();
+            table.Rows[0].Cells[1].Paragraphs[0].Append("Firstname").Bold();
+            table.Rows[0].Cells[2].Paragraphs[0].Append("Lastname").Bold();
+            table.Rows[0].Cells[3].Paragraphs[0].Append("Salary").Bold();
+
+            // Add data to table
+            for(int i = 0 ; i < employees.Count ; i++)
+            {
+                table.InsertRow();
+                table.Rows[i+1].Cells[0].Paragraphs[0].Append(employees[i].Id.ToString());
+                table.Rows[i+1].Cells[1].Paragraphs[0].Append(employees[i].Firstname);
+                table.Rows[i+1].Cells[2].Paragraphs[0].Append(employees[i].Lastname);
+                table.Rows[i+1].Cells[3].Paragraphs[0].Append(employees[i].Salary.ToString()); 
+            }
+
+            document.InsertTable(table);
+
+            // Save the document to a memory stream
+            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            document.SaveAs(stream);
+
+            //Reset the Stream position
+            stream.Position = 0 ;
+
+            // Set the content type and file name for the response
+            string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            string fileName = "SampleDocument";
+
+            return File(stream, contentType, fileName);
+
+
+        }
     }
 }
     
