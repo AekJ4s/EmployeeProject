@@ -12,13 +12,11 @@ namespace myFirstProject.Models
     {
     public int Id { get; set; }
 
-    [Required]
     public string? Firstname { get; set; }
-
-    [Required] //ใช้เพื่อบังคับให้กรอกค่าเข้ามา
+    
     public string? Lastname { get; set; }
 
-    [Range(15000,80000)]
+    [Range(0,150000)]
     public int? Salary { get; set; }
 
     public bool? IsDelete { get; set; }

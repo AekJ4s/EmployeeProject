@@ -147,3 +147,6 @@ c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\ICSha
 c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\SixLabors.Fonts.dll
 c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\SixLabors.ImageSharp.dll
 c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\de\PdfSharpCore.resources.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\obj\Debug\net8.0\myFirstProject.xml
+c:\Users\aek\Desktop\.NetProject\AspDotNet\myFirstProject\bin\Debug\net8.0\myFirstProject.xml

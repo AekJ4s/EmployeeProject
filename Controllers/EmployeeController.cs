@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,8 +10,18 @@ using PdfSharpCore.Pdf;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
-
+[Authorize]
+[Route("api/[controller]")]
 [ApiController]
+public class HelloWorldController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult Get()
+    {
+        return Ok("Helo World");
+    }
+}
+
 [Route("employees")]
 public class EmployeeController : ControllerBase
 {
@@ -25,20 +36,90 @@ public class EmployeeController : ControllerBase
 
     public struct EmployeeCreate
     {
+        
+        /// <summary>
+        /// Firstname of the employee
+        /// </summary>
+        /// <example>Jasdakorn</example>
+        /// <required>true</required>
         public string? Firstname { get; set; }
-
+        /// <summary>
+        /// Lastname of the employee
+        /// </summary>
+        /// <example>Khumdej</example>
+        /// <required>true</required>    
         public string? Lastname { get; set; } 
-
+        /// <summary>
+        /// Salary of the employee
+        /// </summary>
+        /// <example>1500000</example>
+        /// <required>true</required>
+        
         public int? Salary { get; set; }
 
+        /// <summary>
+        /// Department of the employee
+        /// </summary>
+        /// <example>1</example>
+        /// <required>true</required>
         public int? DepartmentId{ get; set; }
-
-        
     }
 
+      // การใช้ XML Comments
+
+     /// <summary>
+    /// Create Employee
+    /// </summary>
+    /// <remarks>
+    /// Sample Request:
+    /// ```json
+    /// POST /Employee
+    /// {
+    ///     "Firstname": "Jasdakorn" ,
+    ///     "Lastname" : "Khumdej" ,
+    ///     "Salary" : 999999,
+    ///     "DepartmentId" : 1 
+    /// }
+    /// ```
+    /// </remarks>
+    /// <param name="EmployeeCreater"></param>
+    /// <returns></returns>
+    /// <response code="200">
+    ///     Success
+    ///     <br/>
+    ///     <br/>
+    ///     Excample response
+    ///     ```json
+    ///     {
+    ///         "Code": 200,
+    ///         "Message":"Success",
+    ///         "Data":{
+    ///             "Id":1,
+    ///             "Firstname":"Jasdakorn",
+    ///             "Lastname":"Khumdej",
+    ///             "Salary":1500000,
+    ///             "DepartmentId":1
+    ///             }
+    ///       }
+    ///       ```
+    ///       </response>
+    ///     <response code="400">
+    ///     Employee not found
+    ///     <br/>
+    ///     <br/>
+    ///     Excample response
+    ///     ```json
+    ///     {
+    ///         "Code": 400,
+    ///         "Message":"Employee not found",
+    ///         "Data": null
+    ///       }
+    ///       ```
+    ///       </response>
+    
     [HttpPost(Name = "CreateEmployee")]
 
-    public ActionResult CreateEmployee(EmployeeCreate employeeCreate)
+    public ActionResult CreateEmployee([FromBody]EmployeeCreate employeeCreate)
     {
         Employee employee = new Employee
         {
@@ -47,7 +128,7 @@ public class EmployeeController : ControllerBase
             Salary = employeeCreate.Salary,
             DepartmentId = employeeCreate.DepartmentId
         };
-
+            
         employee = Employee.Create(_db, employee);
         return Ok(employee);
     }
@@ -60,6 +141,7 @@ public class EmployeeController : ControllerBase
         // .OrderByDescending(q => q.Salary) เรียงจากมากไปน้อย
         List<Employee> employees = Employee.GetAll(_db).OrderByDescending(q => q.Salary).ToList();
         return Ok(new Response
+       
         {
             Code = 200,
             Message = "Success",
@@ -297,6 +379,7 @@ public class EmployeeController : ControllerBase
 
     public ActionResult ExportToPdf()
     {
+        // นำเข้าข้อมูลจาก DATABASE ชื่อ Employee และ Department
         List<Employee> employees = _db.Employees.Where(q => q.IsDelete == false).Include(q => q.Department).ToList();
         
         //Create a new PDF document
@@ -371,5 +454,7 @@ public class EmployeeController : ControllerBase
 
         return File(stream, "application/pdf", "EmployeeTable.pdf");
     }
+
+    
 }
     
