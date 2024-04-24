@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 using myFirstProject.Models;
+using OfficeOpenXml;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
@@ -228,6 +229,64 @@ public class EmployeeController : ControllerBase
             return File(stream, contentType, fileName);
 
 
+        }
+
+        
+    }
+
+    [HttpGet("export/excel", Name = "ExportEmployeeToExcel")]
+    
+    public IActionResult ExportEmployeeToExcel(){
+        List<Employee> employees = Employee.GetAll(_db).ToList();
+
+
+        // Create a new Excel Package
+        using (ExcelPackage package = new ExcelPackage())
+        {
+            //Create a worksheet 
+            ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Employees");
+
+
+            // set the columns headers and decorate them with styles
+            var headerCells = worksheet.Cells["A1:D1"];
+            headerCells.Style.Font.Bold = true;
+            headerCells.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            headerCells.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
+            headerCells.Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+            //set the column headers
+            worksheet.Cells[1, 1].Value = "ID";
+            worksheet.Cells[1, 2].Value = "First Name";
+            worksheet.Cells[1, 3].Value = "Last Name";
+            worksheet.Cells[1, 4].Value = "Salary";
+
+
+            //Add data to worksheet
+            int row = 2;
+            foreach( var employee in employees){
+                worksheet.Cells[row,1].Value = employee.Id;
+                worksheet.Cells[row,2].Value = employee.Firstname;
+                worksheet.Cells[row,3].Value = employee.Lastname;
+                worksheet.Cells[row,4].Value = employee.Salary;
+
+
+                //Apply Cell Border
+                worksheet.Cells[row, 1,row ,4].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                row++;
+            }
+
+            // Auto-fit the Column
+            worksheet.Cells.AutoFitColumns();
+
+            //Convert the Excel Package to a byte array
+            byte[] excelBytes = package.GetAsByteArray();
+
+            // Set the content type and file name for the response
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "Employees.xlsx";
+
+            // Return the Excel file as a file result
+            return File(excelBytes, contentType, fileName);
         }
     }
 }
