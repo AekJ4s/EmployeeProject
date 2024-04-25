@@ -133,6 +133,8 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
 
+    
+
     [HttpGet("GetAll",Name = "GetAllEmployees")]
 
     public ActionResult GetAllEmployees()
@@ -158,11 +160,38 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
 
-    [HttpPut(Name = "UpdateEmployee")]
+    [HttpPut("UpdateEveryThing", Name = "UpdateEmployee")]
 
-    public ActionResult UpdateEmployee(Employee employee)
+    public ActionResult UpdateEmployee([FromBody]Employee employee)
     {
         bool employeeExists = _db.Employees.Any(e => e.Id == employee.Id && e.IsDelete != true);
+        // กรองว่ามีข้อมูล ID มาไหม
+        int IntofData = _db.Employees.Where(e =>e.Id == employee.Id).AsNoTracking().ToList().Count();
+
+        if ( IntofData > 0 ){
+            Employee DataEmployee = _db.Employees.Where(e =>e.Id == employee.Id).AsNoTracking().ToList().First();
+            if( employee.Firstname == null){
+                employee.Firstname = DataEmployee.Firstname;
+            }
+            if( employee.Lastname == null){
+                employee.Lastname = DataEmployee.Lastname;
+            }
+            if( employee.Salary == null){
+                employee.Salary = DataEmployee.Salary;
+            }
+            employee.IsDelete = false; // 
+            employee.CreateDate = DataEmployee.CreateDate; // วันที่สร้างอ้างอิงจากข้อมูลที่มีอยู่
+            employee.UpdateDate = DateTime.Now; // อัพเดตข้อมูลของวันที่อัพเดตเป็นปัจจุบัน
+
+        }else 
+        {
+            return BadRequest(new Response
+            {
+            Code = 400,
+            Message = "you id is not found",
+            Data = null
+        });
+        }
         if(!employeeExists)
         {
             return BadRequest(new Response
@@ -227,6 +256,77 @@ public class EmployeeController : ControllerBase
         }
         );
     }
+
+    [HttpPut("UpdateEmployeeRequest",Name = "UpdateEmployeeRequest")]
+
+    public ActionResult<Response> PUT([FromBody]EmployeeUpdateRequest employee)
+    {
+        Employee newEmployee = new Employee
+        {
+            Id = employee.Id,
+            Firstname = employee.Firstname,
+            Lastname = employee.Lastname,
+            Salary = employee.Salary,
+
+        };
+
+        bool employeeExists = _db.Employees.Any(e => e.Id == employee.Id && e.IsDelete != true);
+        int IntofData = _db.Employees.Where(e =>e.Id == employee.Id).AsNoTracking().ToList().Count();
+        if(IntofData > 0){
+        if(newEmployee.Firstname == null){
+            newEmployee.Firstname = employee.Firstname;
+        }else{
+            newEmployee.Firstname = newEmployee.Firstname;
+        }
+        if(newEmployee.Lastname == null){
+            newEmployee.Lastname = employee.Lastname;
+        }else{
+            newEmployee.Lastname = newEmployee.Lastname;
+        }
+        if(newEmployee.Salary == null){
+            newEmployee.Salary = employee.Salary;
+        }else{
+            newEmployee.Salary = newEmployee.Salary;
+        }
+
+        newEmployee.UpdateDate = DateTime.Now;
+        newEmployee = Employee.Update(_db, newEmployee);
+        }else{
+            return BadRequest(new Response{
+                Code = 400,
+                Message = "Your Id is not found",
+                Data = null
+            });
+        }
+        
+         try
+        {
+            newEmployee = Employee.Update(_db,newEmployee);
+        }
+        catch (Exception e)
+        {
+            //Return 500
+            return StatusCode(500,new Response
+            {
+                Code = 500,
+                Message = e.Message,
+                Data = null
+
+            });
+        }
+    
+        return Ok(new Response
+        {
+            Code = 200,
+            Message = "Success",
+            Data = newEmployee
+        }
+        );
+    }
+
+
+    
+
 
     [HttpGet("search/{name}",Name = "SearchEmployeeByName")]
     

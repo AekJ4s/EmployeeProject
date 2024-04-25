@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KevDDRYcDOiAUu5W+dwZges7i//CakGKkuoC6G6TwhXksAbnbt1gKywCm8pKHdoSWMJC2CdQMhJBDC2+XSRZ2g==",
+  "dgSpecHash": "BPUKwq4YNh56GoVS1aP361EullFXcFAkt0XsKtvfIqUsC7/nZh5XUb/Z9NtNlxnEgvX1TcreSAeEvT/l3yBF/Q==",
   "success": true,
-  "projectFilePath": "c:\\Users\\aek\\Desktop\\.NetProject\\AspDotNet\\myFirstProject\\myFirstProject.csproj",
+  "projectFilePath": "C:\\Users\\aek\\Desktop\\.NetProject\\AspDotNet\\myFirstProject\\myFirstProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aek\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\aek\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
