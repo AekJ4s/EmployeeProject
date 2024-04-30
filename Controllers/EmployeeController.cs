@@ -273,13 +273,14 @@ public class EmployeeController : ControllerBase
         bool employeeExists = _db.Employees.Any(e => e.Id == employee.Id && e.IsDelete != true);
         int IntofData = _db.Employees.Where(e =>e.Id == employee.Id).AsNoTracking().ToList().Count();
         if(IntofData > 0){
-        if(newEmployee.Firstname == null){
-            newEmployee.Firstname = employee.Firstname;
+            Employee DataEmployee = _db.Employees.Where(e =>e.Id == employee.Id).AsNoTracking().ToList().First();
+        if(newEmployee.Firstname == null || newEmployee.Firstname == "string"){
+            newEmployee.Firstname = DataEmployee.Firstname;
         }else{
             newEmployee.Firstname = newEmployee.Firstname;
         }
         if(newEmployee.Lastname == null){
-            newEmployee.Lastname = employee.Lastname;
+            newEmployee.Lastname = DataEmployee.Lastname;
         }else{
             newEmployee.Lastname = newEmployee.Lastname;
         }
